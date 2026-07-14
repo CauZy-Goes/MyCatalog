@@ -13,7 +13,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import DeclarativeBase, sessionmaker
 
 # Ajuste usuário/senha/host/porta conforme o seu docker-compose.yml.
-DATABASE_URL = "mssql+pymssql://sa:SuaSenhaAqui@localhost:1433/master"
+DATABASE_URL = "mssql+pymssql://sa:MyCatalog%40123@localhost:1434/master"
 
 engine = create_engine(DATABASE_URL, echo=False, future=True)
 
@@ -32,6 +32,8 @@ def init_db() -> None:
     Precisa que os models já estejam importados antes de chamar essa
     função, para que fiquem registrados em Base.metadata.
     """
-    from entity import Entity  # noqa: F401
+    from models.entity import Entity  # noqa: F401
+    from models.category import Category  # noqa: F401
+    from models.category_item import CategoryItem  # noqa: F401
 
     Base.metadata.create_all(engine)

@@ -3,26 +3,31 @@ from models.entity import Entity
 from models.category import Category
 from models.category_item import CategoryItem
 
-entity = Entity(
-    name="Example Entity",
-    address="123 Example St",
-    created_at=datetime(2003, 12, 23),
-)
+from config.database.database import init_db
 
-print(entity)
+if __name__ == "__main__":
+    init_db() 
 
-category = Category(
-    name="Example Category ",
-    entity_id=1,
-    entity=entity,
-)
+# entity = Entity(
+#     name="Example Entity",
+#     address="123 Example St",
+#     created_at=datetime(2003, 12, 23),
+# )
 
-print(category)
+# print(entity)
 
-categoryItem = CategoryItem(
-    name="Example Category Item",
-    category_id=1,
-    category=category,
-)
+# category = Category(
+#     name="Example Category ",
+#     entity_id=1,
+#     entity=entity,
+# )
 
-print(categoryItem)
+# print(category)
+
+# categoryItem = CategoryItem(
+#     name="Example Category Item",
+#     category_id=1,
+#     category=category,
+# )
+
+# print(categoryItem)
