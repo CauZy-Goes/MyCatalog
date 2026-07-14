@@ -1,5 +1,6 @@
 from datetime import datetime
 from models.entity import Entity
+from models.category import Category
 
 entity = Entity(
     name="Example Entity",
@@ -8,3 +9,10 @@ entity = Entity(
 )
 
 print(entity)
+
+category = Category(
+    name="Example Category ",
+    entity_id=1,
+)
+
+print(category)
