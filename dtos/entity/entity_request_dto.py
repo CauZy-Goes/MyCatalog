@@ -1,7 +1,7 @@
 from pydantic import BaseModel, EmailStr
 
 
-class EntityUpdateDTO(BaseModel):
+class EntityRequestDTO(BaseModel):
     name: str | None = None
     description: str | None = None
     address: str | None = None
