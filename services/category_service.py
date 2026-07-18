@@ -11,7 +11,7 @@ class CategoryService:
 
     def find_all(self) -> list[Category]:
         stmt = select(Category)
-        return self.db.scalars(stmt).all()
+        return list(self.db.scalars(stmt).all())
 
     def find_by_id(self, category_id: int) -> Category | None:
         stmt = select(Category).where(Category.id == category_id)
@@ -19,11 +19,11 @@ class CategoryService:
 
     def find_by_name(self, text: str) -> list[Category]:
         stmt = select(Category).where(Category.name.contains(text))
-        return self.db.scalars(stmt).all()
+        return list(self.db.scalars(stmt).all())
 
     def find_by_entity(self, entity_id: int) -> list[Category]:
         stmt = select(Category).where(Category.entity_id == entity_id)
-        return self.db.scalars(stmt).all()
+        return list(self.db.scalars(stmt).all())
 
     def create_category(self, category: Category) -> Category:
         self.db.add(category)

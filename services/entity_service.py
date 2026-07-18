@@ -19,7 +19,7 @@ class EntityService:
     def find_all(self) -> list[Entity]:
         #return self.db.query(Entity).all()
         stmt = select(Entity)
-        entities = self.db.scalars(stmt).all()
+        entities = list(self.db.scalars(stmt).all())
         return entities
 
     def find_by_id(self, entity_id: int) -> Entity | None:
@@ -37,7 +37,7 @@ class EntityService:
     
     def find_by_name(self, text: str) -> list[Entity]:
         stmt = select(Entity).where(Entity.name.contains(text))
-        return self.db.scalars(stmt).all()
+        return list(self.db.scalars(stmt).all())
         # return (
         # self.db.query(Entity)
         # .filter(Entity.name.like(f"%{name}%"))
