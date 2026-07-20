@@ -210,5 +210,51 @@ class CategoryService:
         )
 
         self.db.execute(stmt)
+
+    def _shift_orders_down(
+        self,
+        entity_id: int,
+        starting_order: int,
+        ending_order: int
+    ):
+        """
+        Desloca um intervalo de categorias para baixo (-1).
+
+        Exemplo:
+
+            Antes
+
+                1
+                2
+                3
+                4
+                5
+
+            Categoria da posição 2
+            será movida para posição 5.
+
+            Resultado
+
+                1
+                3
+                4
+                5
+                2
+
+        As categorias entre 3 e 5 diminuem
+        uma posição.
+        """
+
+        stmt = (
+            update(Category)
+            .where(
+                Category.entity_id == entity_id,
+                Category.order > starting_order,
+                Category.order <= ending_order
+            )
+            .values(order=Category.order - 1)
+        )
+
+        self.db.execute(stmt)
     
     
