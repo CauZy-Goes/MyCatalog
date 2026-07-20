@@ -1,4 +1,4 @@
-from sqlalchemy import func, select
+from sqlalchemy import func, select, update
 
 from config.database.database import SessionLocal
 from models.category import Category
@@ -132,5 +132,46 @@ class CategoryService:
             return last_order + 1
 
         return desired_order
+    
+    def _shift_orders_up(
+        self,
+        entity_id: int,
+        starting_order: int
+    ):
+        """
+        Desloca todas as categorias para cima (+1),
+        abrindo espaço para uma nova categoria.
+
+        Exemplo:
+
+            Antes
+
+                1
+                2
+                3
+                4
+
+            Inserindo na posição 2
+
+            Depois
+
+                1
+                3
+                4
+                5
+
+        A nova categoria poderá ser inserida na posição 2.
+        """
+
+        stmt = (
+            update(Category)
+            .where(
+                Category.entity_id == entity_id,
+                Category.order >= starting_order
+            )
+            .values(order=Category.order + 1)
+        )
+
+        self.db.execute(stmt)
     
     
