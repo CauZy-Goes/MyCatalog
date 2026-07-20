@@ -256,5 +256,91 @@ class CategoryService:
         )
 
         self.db.execute(stmt)
+
+    def _move_category(
+        self,
+        category: Category,
+        new_order: int
+    ):
+        """
+        Move uma categoria para uma nova posição.
+
+        Este método reorganiza automaticamente os orders das
+        demais categorias da mesma entidade.
+
+        Regras:
+
+        - Se o order não mudou, não faz nada.
+        - Se mover para cima, desloca as categorias para baixo (+1).
+        - Se mover para baixo, desloca as categorias para cima (-1).
+
+        Exemplos
+
+        Antes
+
+            1
+            2
+            3
+            4
+            5
+
+        Mover categoria 5 para posição 2
+
+        Depois
+
+            1
+            5
+            2
+            3
+            4
+        """
+
+        new_order = self._normalize_order(
+            category.entity_id,
+            new_order
+        )
+
+        current_order = category.order
+
+        if new_order == current_order:
+            return
+
+        #
+        # Move para cima
+        #
+        if new_order < current_order:
+
+            stmt = (
+                update(Category)
+                .where(
+                    Category.entity_id == category.entity_id,
+                    Category.order >= new_order,
+                    Category.order < current_order
+                )
+                .values(order=Category.order + 1)
+            )
+
+            self.db.execute(stmt)
+
+        #
+        # Move para baixo
+        #
+        else:
+
+            stmt = (
+                update(Category)
+                .where(
+                    Category.entity_id == category.entity_id,
+                    Category.order <= new_order,
+                    Category.order > current_order
+                )
+                .values(order=Category.order - 1)
+            )
+
+            self.db.execute(stmt)
+
+        category.order = new_order
+
+
     
     
