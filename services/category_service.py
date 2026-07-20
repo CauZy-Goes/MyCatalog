@@ -341,6 +341,30 @@ class CategoryService:
 
         category.order = new_order
 
+        def _apply_updates(
+            self,
+            category: Category,
+            **kwargs
+        ):
+            """
+            Atualiza dinamicamente os atributos da categoria.
+
+            Apenas atributos existentes serão modificados.
+
+            Exemplo
+
+                self._apply_updates(
+                    category,
+                    name="Bebidas",
+                    order=2
+                )
+            """
+
+            for key, value in kwargs.items():
+
+                if hasattr(category, key):
+                    setattr(category, key, value)
+
 
     
     
