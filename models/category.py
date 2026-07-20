@@ -2,7 +2,7 @@ from datetime import datetime
 
 from typing import List
 
-from sqlalchemy import DateTime, Integer, String, ForeignKey
+from sqlalchemy import DateTime, Integer, String, ForeignKey, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from config.database.database import Base
@@ -10,6 +10,14 @@ from config.database.database import Base
 
 class Category(Base):
     __tablename__ = "category"
+
+    __table_args__ = (
+        UniqueConstraint(
+            "entity_id",
+            "order",
+            name="uq_category_entity_order"
+        ),
+    )
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     name: Mapped[str] = mapped_column(String(100), nullable=False)
