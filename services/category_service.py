@@ -1,4 +1,4 @@
-from sqlalchemy import select
+from sqlalchemy import func, select
 
 from config.database.database import SessionLocal
 from models.category import Category
@@ -57,3 +57,29 @@ class CategoryService:
         self.db.commit()
 
         return True
+    
+    def _get_last_order(self, entity_id: int) -> int:
+        """
+        Retorna o maior order existente para a entidade.
+
+        Exemplo:
+
+            Entity 1
+            --------
+            Order: 1
+            Order: 2
+            Order: 3
+
+            Retorno:
+                3
+
+        Caso a entidade ainda não possua categorias,
+        retorna 0.
+        """
+
+        stmt = (
+            select(func.max(Category.order))
+            .where(Category.entity_id == entity_id)
+        )
+
+        return self.db.scalar(stmt) or 0
