@@ -173,5 +173,42 @@ class CategoryService:
         )
 
         self.db.execute(stmt)
+
+    def _close_gap(
+        self,
+        entity_id: int,
+        deleted_order: int
+    ):
+        """
+        Fecha o espaço deixado por uma categoria removida.
+
+        Exemplo:
+
+            Antes
+
+                1
+                2
+                3
+                4
+
+            Remove order 2
+
+            Depois
+
+                1
+                2
+                3
+        """
+
+        stmt = (
+            update(Category)
+            .where(
+                Category.entity_id == entity_id,
+                Category.order > deleted_order
+            )
+            .values(order=Category.order - 1)
+        )
+
+        self.db.execute(stmt)
     
     
