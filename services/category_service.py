@@ -83,3 +83,54 @@ class CategoryService:
         )
 
         return self.db.scalar(stmt) or 0
+    
+    def _normalize_order(
+        self,
+        entity_id: int,
+        desired_order: int
+    ) -> int:
+        """
+        Ajusta o order informado para uma posição válida.
+
+        Regras:
+
+        - Se for menor que 1, vira 1.
+        - Se for maior que o último + 1,
+        vira último + 1.
+
+        Exemplos:
+
+            Orders atuais:
+                1
+                2
+                3
+
+            desired_order = -5
+
+            Resultado:
+                1
+
+        ----------------------------
+
+            Orders atuais:
+                1
+                2
+                3
+
+            desired_order = 100
+
+            Resultado:
+                4
+        """
+
+        last_order = self._get_last_order(entity_id)
+
+        if desired_order < 1:
+            return 1
+
+        if desired_order > last_order + 1:
+            return last_order + 1
+
+        return desired_order
+    
+    
