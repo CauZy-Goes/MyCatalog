@@ -74,7 +74,7 @@ class CategoryService:
                 3
 
         Caso a entidade ainda não possua categorias,
-        retorna 0.
+        retorna 1.
         """
 
         stmt = (
@@ -82,7 +82,7 @@ class CategoryService:
             .where(Category.entity_id == entity_id)
         )
 
-        return self.db.scalar(stmt) or 0
+        return self.db.scalar(stmt) or 1
     
     def _normalize_order(
         self,
